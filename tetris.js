@@ -3,8 +3,6 @@ const context = canvas.getContext('2d');
 
 context.scale(20, 20);
 
-context.fillStyle = '#000';	
-context.fillRect(0, 0, canvas.width, canvas.height);
 
 const matrix = [
 	[0, 0, 0],
@@ -13,6 +11,9 @@ const matrix = [
 ];
 
 function draw() {
+context.fillStyle = '#000';	
+context.fillRect(0, 0, canvas.width, canvas.height);
+
 drawMatrix(player.matrix, player.pos);
 
 }
@@ -28,8 +29,19 @@ matrix.forEach((row, y) => {
 	});
 });
 }
+let dropCounter = 0;
+let dropInterval = 1000;
 
-function update() {
+let lastTime = 0;
+function update(time = 0) {
+	const deltaTime = time - lastTime;
+	lastTime = time; 
+
+	dropCounter += deltaTime;
+	if (dropCounter > dropInterval){
+		player.pos.y++;
+		dropCounter = 0;
+	}
 	draw();
 	requestAnimationFrame(update);
 }
